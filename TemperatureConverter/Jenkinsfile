@@ -1,0 +1,27 @@
+pipeline {
+    agent { 
+        label 'buildconductor-iib'
+    }
+
+    stages {
+        stage('Checkout'){
+            steps {
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '/home/jenkins/workspace/build_home/load']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/greghodgkinson/tempconvert-iib-example.git']]])
+            }
+          
+       }
+        stage('Build') {
+            steps {
+            sh "#!/usr/bin/bash \n" +
+             "/prolifics/buildconductor/iib/run-automation.sh build tempconvert TemperatureConverter" 
+          }
+        }
+        stage('Deploy') {
+            steps {
+                sh '''#!/bin/bash -l
+                    /prolifics/buildconductor/iib/run-automation2.sh deploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser
+                '''
+          }
+        }
+    }
+}
