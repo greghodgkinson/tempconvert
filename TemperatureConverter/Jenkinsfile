@@ -16,10 +16,10 @@ pipeline {
              "/prolifics/buildconductor/iib/run-automation.sh build tempconvert TemperatureConverter" 
           }
         }
-        stage('Deploy') {
+        stage('Override and Deploy') {
             steps {
                 sh '''#!/bin/bash -l
-                    /prolifics/buildconductor/iib/run-automation2.sh deploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser
+                    /prolifics/buildconductor/iib/run-automation2.sh overrideAndDeploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser TemperatureConverter TemperatureConverter/overrides/development.properties
                 '''
           }
         }
