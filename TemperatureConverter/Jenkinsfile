@@ -4,21 +4,12 @@ pipeline {
     }
 
     stages {
-       // stage('Checkout'){
-         //   steps {
-           //     checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '/home/jenkins/workspace/build_home/load']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/greghodgkinson/tempconvert-iib-example.git']]])
-            //}
-          
-       //}
-       stage('Checkout') {
+       stage('Checkout'){
             steps {
-                
-                git poll: true,
-                branch: 'master',
-                credentialsId: 'f633320a-b947-4f6c-bf9b-a5565710fe4c',
-               	url: 'git@github.com:greghodgkinson/tempconvert-iib-example.git'                         
+                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '/home/jenkins/workspace/build_home/load']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/greghodgkinson/tempconvert-iib-example.git']]])
             }
-        }
+          
+       }     
         stage('Build BAR') {
             steps {
             sh "/prolifics/buildconductor/iib/run-automation.sh build tempconvert TemperatureConverter" 
@@ -26,7 +17,7 @@ pipeline {
         }
         stage('Override and Deploy BAR') {
             steps {
-                sh "/prolifics/buildconductor/iib/run-automation2.sh overrideAndDeploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser TemperatureConverter TemperatureConverter/overrides/development.properties"
+                sh "/prolifics/buildconductor/iib/run-automation.sh overrideAndDeploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser TemperatureConverter TemperatureConverter/overrides/development.properties"
 
           }
         }
