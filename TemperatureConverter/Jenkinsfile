@@ -6,7 +6,7 @@ pipeline {
     stages {
        stage('Checkout'){
             steps {
-                checkout([$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '/home/jenkins/workspace/build_home/load']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/greghodgkinson/tempconvert-iib-example.git']]])
+                checkout(poll: true, [$class: 'GitSCM', branches: [[name: '*/master']], doGenerateSubmoduleConfigurations: false, extensions: [[$class: 'RelativeTargetDirectory', relativeTargetDir: '/home/jenkins/workspace/build_home/load']], submoduleCfg: [], userRemoteConfigs: [[url: 'https://github.com/greghodgkinson/tempconvert-iib-example.git']]])
             }
           
        }     
