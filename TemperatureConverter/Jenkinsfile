@@ -15,11 +15,17 @@ pipeline {
             sh "/prolifics/buildconductor/iib/run-automation.sh build tempconvert TemperatureConverter" 
           }
         }
-        stage('Override and Deploy BAR') {
-            steps {
-                sh "/prolifics/buildconductor/iib/run-automation.sh overrideAndDeploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser TemperatureConverter TemperatureConverter/overrides/development.properties"
-
-          }
+        stage('Publish to UCD') {	
+        	steps { 	
+        	sh 'ls -la ${WORKSPACE}/output'   	
+        	sh '/prolifics/buildconductor/iib/run-automation.sh uploadToUcd "Temperature Converter IIB10.0" ${BUILD_NUMBER} output *.bar admin admin ${BUILD_URL} https://10.0.10.47:8446'            	
+            }                        	 		
         }
+        //stage('Override and Deploy BAR') {
+        // steps {
+        //        sh "/prolifics/buildconductor/iib/run-automation.sh overrideAndDeploy tempconvert 10.0.12.60 30161 IIB_NODE IIB_SERVER iibuser iibuser TemperatureConverter TemperatureConverter/overrides/development.properties"
+        //
+        //  }
+        //}
     }
 }
